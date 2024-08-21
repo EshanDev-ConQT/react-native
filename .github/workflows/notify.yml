@@ -25,7 +25,7 @@ jobs:
             A new push has been made to the repository.
             Repository: ${{ github.repository }}
             Branch: ${{ github.ref_name }}
-            Commit: ${{ github.event.head_commit.id }}
+            Commit: ${{ github.event.head_commit.message }}
             Message: ${{ github.event.head_commit.message }}
             Pushed by: ${{ github.actor }}
           to: 'meru.techcurve@gmail.com'
