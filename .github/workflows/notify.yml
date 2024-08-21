@@ -24,13 +24,6 @@ jobs:
           body: |
             A new push has been made to the repository.
             Repository: ${{ github.repository }}
-<<<<<<< HEAD
-            Event: ${{ github.event_name }}
-            Branch: ${{ github.ref }}
-            Sender: ${{ github.actor }}
-          to: 'intern61techcurve@gmail.com'  # Replace with the recipient's email
-          from: ${{ secrets.EMAIL_USERNAME }}  # Replace with the sender's emai
-=======
             Branch: ${{ github.ref_name }}
             Commit: ${{ github.event.head_commit.id }}
             Message: ${{ github.event.head_commit.message }}
@@ -59,4 +52,3 @@ jobs:
             Pulled by: ${{ github.actor }}
           to: 'intern61techcurve@gmail.com'
           from: ${{ secrets.EMAIL_USERNAME }}
->>>>>>> f59facf (Added push and pull commit msges)
