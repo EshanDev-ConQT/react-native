@@ -3,7 +3,7 @@ name: Notify on Push or Pull Request
 on:
   push:
     branches:
-      - dev  # Triggers on any branch
+      - main # Triggers on any branch
   pull_request:
     types: [opened, edited, closed]
 
