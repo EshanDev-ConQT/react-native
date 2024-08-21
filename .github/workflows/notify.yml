@@ -3,27 +3,52 @@ name: Notify on Push or Pull Request
 on:
   push:
     branches:
-      - dev  # Triggers on any branch
+      - main # Triggers on any branch
   pull_request:
     types: [opened, edited, closed]
 
 jobs:
-  notify:
+  notify-push:
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - name: Send Email Notification
+      - name: Send Email Notification for Push
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
           server_port: 465
           username: ${{ secrets.EMAIL_USERNAME }}
-          password: ${{ secrets.EMAIL_PASSWORD }} # If you have enabled 2FA then you need to generate an App password from Sercurity Sections on Google
-          subject: 'GitHub Alert: Code Push or Pull Request'
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: |
+            ${{ github.repository }}: Code Pushed by ${{ github.actor }} in ${{ github.ref_name }} -m "${{ github.event.head_commit.message }}"
           body: |
-            A new push or pull request has been made to the repository.
+            A new push has been made to the repository.
             Repository: ${{ github.repository }}
-            Event: ${{ github.event_name }}
-            Branch: ${{ github.ref }}
-            Sender: ${{ github.actor }}
-          to: 'intern61techcurve@gmail.com'  # Replace with the recipient's email
-          from: ${{ secrets.EMAIL_USERNAME }}  # Replace with the sender's email
+            Branch: ${{ github.ref_name }}
+            Commit: ${{ github.event.head_commit.id }}
+            Message: ${{ github.event.head_commit.message }}
+            Pushed by: ${{ github.actor }}
+          to: 'intern61techcurve@gmail.com'
+          from: ${{ secrets.EMAIL_USERNAME }}
+
+  notify-pull:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Email Notification for Pull Request
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: |
+            ${{ github.repository }}: Code Pulled by ${{ github.actor }} in ${{ github.base_ref }}
+          body: |
+            A new pull request has been made to the repository.
+            Repository: ${{ github.repository }}
+            Branch: ${{ github.base_ref }}
+            Action: ${{ github.event.action }}
+            Pulled by: ${{ github.actor }}
+          to: 'intern61techcurve@gmail.com'
+          from: ${{ secrets.EMAIL_USERNAME }}
